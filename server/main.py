@@ -1,10 +1,6 @@
-from flask import Flask
-
-app = Flask(__name__)
+from server import app
 
 
-@app.route('/', methods=['GET'])
+@app.route("/", methods=["GET"])
 def home():
-    return {
-        "message": 'Server says Hi!!'
-    }
+    return {"message": "Server says Hi!!"}
