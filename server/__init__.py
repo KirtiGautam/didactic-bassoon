@@ -1,8 +1,20 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
-app = Flask(__name__)
+db = SQLAlchemy()
 
-app.config["SQLALCHEMY_DATABASE_URI"] = "psql://postgres:postgres@localhost:5432/flask"
 
-db = SQLAlchemy(app)
+def create_app():
+    """Construct the core application."""
+    app = Flask(__name__, instance_relative_config=False)
+    app.config[
+        "SQLALCHEMY_DATABASE_URI"
+    ] = "postgresql://postgres:postgres@localhost:5432/flask"
+    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+    db.init_app(app)
+
+    with app.app_context():
+        # Initialize Global db
+        db.create_all()
+
+        return app
