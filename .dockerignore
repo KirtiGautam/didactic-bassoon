@@ -1,0 +1,10 @@
+env
+secrets
+secrets.docker
+__pycache__
+.git
+.dockerignore
+.gitignore
+.vscode
+Dockerfile
+docker-compose.yml
