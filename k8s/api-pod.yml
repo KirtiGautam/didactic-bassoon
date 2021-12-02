@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: api-pod
+  labels:
+    api: flask
+spec:
+  containers:
+    - name: api
+      image: kirtigautam/api:1
+      envFrom:
+        - secretRef:
+            name: api-secret
+      ports:
+        - containerPort: 8000
