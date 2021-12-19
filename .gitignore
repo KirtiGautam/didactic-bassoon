@@ -4,3 +4,4 @@ __pycache__
 secrets
 secrets.docker
 api-secrets.yml
+db-configmap.yml
