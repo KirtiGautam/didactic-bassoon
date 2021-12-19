@@ -13,3 +13,4 @@ spec:
             name: api-secret
       ports:
         - containerPort: 8000
+      imagePullPolicy: Always

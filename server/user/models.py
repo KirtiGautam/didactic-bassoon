@@ -1,5 +1,7 @@
+# from sqlalchemy.orm import load_only
 from server import db
 from sqlalchemy.sql.elements import BinaryExpression
+from werkzeug.security import generate_password_hash, check_password_hash
 from marshmallow import EXCLUDE, post_load
 from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 
@@ -7,10 +9,19 @@ from marshmallow_sqlalchemy import SQLAlchemyAutoSchema
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
-    password = db.Column(db.String(255), unique=True, nullable=False)
+    password = db.Column(db.String(), nullable=False)
+
+    def __init__(self, username, password, *args, **kwargs) -> None:
+        self.username = username
+        self.password = generate_password_hash(password)
+        super().__init__(*args, **kwargs)
 
     def __repr__(self) -> str:
         return f"{self.username}"
+
+    def verify_password(self, password):
+        print(self.password, password)
+        return check_password_hash(self.password, password)
 
     @classmethod
     def filter(self, *criterion: BinaryExpression or bool):
@@ -42,6 +53,7 @@ class UserSchema(SQLAlchemyAutoSchema):
     class Meta:
         model = User
         unknown = EXCLUDE
+        load_only = ["password"]
 
     @post_load
     def initiate_class(self, data_dict, many, partial):
